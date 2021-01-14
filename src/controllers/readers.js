@@ -15,3 +15,7 @@ In .then() , we give back a response to the user, with a status 201
 exports.create = (req, res) => {
   Reader.create(req.body).then((reader) => res.status(201).json(reader));
 };
+
+exports.list = (req, res) => {
+  Reader.findAll().then((readers) => res.status(200).json(readers));
+};
