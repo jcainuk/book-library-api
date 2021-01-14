@@ -45,4 +45,34 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
     });
   });
+  describe('with readers in the database', () => {
+    let readers;
+    beforeEach((done) => {
+      Promise.all([
+        Reader.create({ name: "Harry Hill", email: "hhill@gmail.com" }),
+        Reader.create({ name: "Jason Donovan", email: "Jdawg@outlook.com" }),
+        Reader.create({ name: "Dave Windsor", email: "Windsor40@hotmail.com" }),
+      ]).then((documents) => {
+        readers = documents;
+        done();
+      });
+    });
+    describe('GET /readers', () => {
+      it('gets all reader records', (done) => {
+        request(app)
+          .get('/readers')
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(3);
+            res.body.forEach((reader) => {
+              const expected = readers.find((a) => a.id === reader.id);
+              expect(reader.name).to.equal(expected.name);
+              expect(reader.email).to.equal(expected.email);
+            });
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
+  });
 });
