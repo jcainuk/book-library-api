@@ -15,9 +15,7 @@ const setupDatabase = () => {
 
   connection.sync({ alter: true });
   return {
-    Reader
-
-
+    Reader,
   };
 };
 
