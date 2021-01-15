@@ -19,3 +19,5 @@ app.post('/readers', readerControllers.create);
 app.get('/readers', readerControllers.list);
 
 app.get('/readers/:id', readerControllers.getReaderById);
+
+app.patch('/readers/:id', readerControllers.updateReader);
