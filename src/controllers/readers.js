@@ -30,3 +30,14 @@ exports.getReaderById = (req, res) => {
     }
   });
 };
+
+exports.updateReader = (req, res) => {
+  const { id } = req.params;
+  Reader.update(req.body, { where: { id } }).then((rowsUpdated) => {
+    if (!rowsUpdated) {
+      res.status(404).json({ error: 'The reader could not be found.' });
+    } else {
+      res.status(200).json(rowsUpdated);
+    }
+  });
+};
