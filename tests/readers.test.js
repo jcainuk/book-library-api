@@ -30,6 +30,7 @@ describe('/readers', () => {
       const response = await request(app).post('/readers').send({
         name: 'Joe Bloggs',
         email: 'jbloggs@fakemail.com',
+        password: 'supersecret',
       });
       await expect(response.status).to.equal(201);
       expect(response.body.name).to.equal('Joe Bloggs');
@@ -43,15 +44,16 @@ describe('/readers', () => {
       const insertedReaderRecords = await Reader.findByPk(response.body.id, { raw: true });
       expect(insertedReaderRecords.name).to.equal('Joe Bloggs');
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
+      expect(insertedReaderRecords.password).to.equal('supersecret');
     });
   });
   describe('with readers in the database', () => {
     let readers;
     beforeEach((done) => {
       Promise.all([
-        Reader.create({ name: "Harry Hill", email: "hhill@gmail.com" }),
-        Reader.create({ name: "Jason Donovan", email: "Jdawg@outlook.com" }),
-        Reader.create({ name: "Dave Windsor", email: "Windsor40@hotmail.com" }),
+        Reader.create({ name: "Harry Hill", email: "hhill@gmail.com", password: "supersecret1" }),
+        Reader.create({ name: "Jason Donovan", email: "Jdawg@outlook.com", password: "supersecret2" }),
+        Reader.create({ name: "Dave Windsor", email: "Windsor40@hotmail.com", password: "supersecret3" }),
       ]).then((documents) => {
         readers = documents;
         done();
@@ -68,6 +70,7 @@ describe('/readers', () => {
               const expected = readers.find((a) => a.id === reader.id);
               expect(reader.name).to.equal(expected.name);
               expect(reader.email).to.equal(expected.email);
+              expect(reader.password).to.equal(expected.password);
             });
             done();
           })
