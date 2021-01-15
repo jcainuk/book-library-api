@@ -20,7 +20,7 @@ exports.list = (req, res) => {
   Reader.findAll().then((readers) => res.status(200).json(readers));
 };
 
-exports.getArtistById = (req, res) => {
+exports.getReaderById = (req, res) => {
   const { id } = req.params;
   Reader.findByPk(id).then((reader) => {
     if (!reader) {

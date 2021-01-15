@@ -17,3 +17,5 @@ app.get('/', (req, res) => {
 app.post('/readers', readerControllers.create);
 
 app.get('/readers', readerControllers.list);
+
+app.get('/readers/:id', readerControllers.getReaderById);

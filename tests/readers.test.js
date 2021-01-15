@@ -82,7 +82,7 @@ describe('/readers', () => {
           .then((res) => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(reader.name);
-            expect(res.body.genre).to.equal(reader.email);
+            expect(res.body.email).to.equal(reader.email);
             done();
           })
           .catch((error) => done(error));
