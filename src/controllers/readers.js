@@ -19,3 +19,14 @@ exports.create = (req, res) => {
 exports.list = (req, res) => {
   Reader.findAll().then((readers) => res.status(200).json(readers));
 };
+
+exports.getArtistById = (req, res) => {
+  const { id } = req.params;
+  Reader.findByPk(id).then((reader) => {
+    if (!reader) {
+      res.status(404).json({ error: 'The reader could not be found.' });
+    } else {
+      res.status(200).json(reader);
+    }
+  });
+};
