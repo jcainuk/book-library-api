@@ -98,5 +98,45 @@ describe('/readers', () => {
           .catch((error) => done(error));
       });
     });
+    describe("PATCH /readers/:id", () => {
+      it("updates reader name by id", (done) => {
+        const reader = readers[0];
+        request(app)
+          .patch(`/readers/${reader.id}`)
+          .send({ name: "Steven Jones" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
+              expect(updatedReader.name).to.equal("Steven Jones");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("updates reader email by id", (done) => {
+        const reader = readers[0];
+        request(app)
+          .patch(`/readers/${reader.id}`)
+          .send({ email: "LSmith@fakemail.co.uk" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
+              expect(updatedReader.email).to.equal("LSmith@fakemail.co.uk");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("returns a 404 if the reader does not exist", (done) => {
+        request(app)
+          .patch("/readers/12345")
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal("The reader could not be found.");
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 });
