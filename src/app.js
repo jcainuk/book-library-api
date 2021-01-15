@@ -21,3 +21,5 @@ app.get('/readers', readerControllers.list);
 app.get('/readers/:id', readerControllers.getReaderById);
 
 app.patch('/readers/:id', readerControllers.updateReader);
+
+app.delete('/readers/:id', readerControllers.deleteReader);
