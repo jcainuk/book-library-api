@@ -138,5 +138,30 @@ describe('/readers', () => {
           .catch((error) => done(error));
       });
     });
+    describe("DELETE /readers/:readerId", () => {
+      it("deletes reader record by id", (done) => {
+        const reader = readers[0];
+        request(app)
+          .delete(`/readers/${reader.id}`)
+          .then((res) => {
+            expect(res.status).to.equal(204);
+            Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
+              expect(updatedReader).to.equal(null);
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("returns a 404 if the reader does not exist", (done) => {
+        request(app)
+          .delete("/readers/12345")
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal("The reader could not be found.");
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 });
