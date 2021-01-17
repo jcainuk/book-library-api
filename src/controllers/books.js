@@ -18,3 +18,14 @@ exports.getBookById = (req, res) => {
     }
   });
 };
+
+exports.updateBook = (req, res) => {
+  const { id } = req.params;
+  Book.update(req.body, { where: { id } }).then(([rowsUpdated]) => {
+    if (!rowsUpdated) {
+      res.status(404).json({ error: 'The book could not be found.' });
+    } else {
+      res.status(200).json(rowsUpdated);
+    }
+  });
+};
