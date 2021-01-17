@@ -73,10 +73,10 @@ describe('/books', () => {
           .get(`/books/${book.id}`)
           .then((res) => {
             expect(res.status).to.equal(200);
-            expect(res.body.title).to.equal(reader.title);
-            expect(res.body.author).to.equal(reader.author);
-            expect(res.body.genre).to.equal(reader.genre);
-            expect(res.body.ISBN).to.equal(reader.ISBN);
+            expect(res.body.title).to.equal(book.title);
+            expect(res.body.author).to.equal(book.author);
+            expect(res.body.genre).to.equal(book.genre);
+            expect(res.body.ISBN).to.equal(book.ISBN);
             done();
           })
           .catch((error) => done(error));
