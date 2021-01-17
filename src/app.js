@@ -1,5 +1,6 @@
 const express = require('express');
 const readerControllers = require('./controllers/readers');
+const bookControllers = require('./controllers/books');
 
 const app = express();
 app.use(express.json());
@@ -23,3 +24,5 @@ app.get('/readers/:id', readerControllers.getReaderById);
 app.patch('/readers/:id', readerControllers.updateReader);
 
 app.delete('/readers/:id', readerControllers.deleteReader);
+
+// books
