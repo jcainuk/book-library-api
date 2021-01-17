@@ -160,5 +160,30 @@ describe('/books', () => {
           .catch((error) => done(error));
       });
     });
+    describe("DELETE /books/:bookId", () => {
+      it("deletes book record by id", (done) => {
+        const book = books[0];
+        request(app)
+          .delete(`/books/${book.id}`)
+          .then((res) => {
+            expect(res.status).to.equal(204);
+            Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+              expect(updatedBook).to.equal(null);
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("returns a 404 if the book does not exist", (done) => {
+        request(app)
+          .delete("/books/12345")
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal("The book could not be found.");
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 });
