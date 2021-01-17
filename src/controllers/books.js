@@ -29,3 +29,14 @@ exports.updateBook = (req, res) => {
     }
   });
 };
+
+exports.deleteBook = (req, res) => {
+  const { id } = req.params;
+  Book.destroy({ where: { id } }).then((rowsDeleted) => {
+    if (!rowsDeleted) {
+      res.status(404).json({ error: "The book could not be found."});
+    } else {
+      res.status(204).json({ message: "Deleted successfully"});
+    }
+  });
+};
