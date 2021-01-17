@@ -28,3 +28,5 @@ app.delete('/readers/:id', readerControllers.deleteReader);
 // books
 
 app.post('/books', bookControllers.create);
+
+app.get('/books', bookControllers.list);
