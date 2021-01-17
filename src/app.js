@@ -26,3 +26,5 @@ app.patch('/readers/:id', readerControllers.updateReader);
 app.delete('/readers/:id', readerControllers.deleteReader);
 
 // books
+
+app.post('/books', bookControllers.create);
