@@ -7,3 +7,14 @@ exports.create = (req, res) => {
 exports.list = (req, res) => {
   Book.findAll().then((readers) => res.status(200).json(readers));
 };
+
+exports.getBookById = (req, res) => {
+  const { id } = req.params;
+  Book.findByPk(id).then((book) => {
+    if (!book) {
+      res.status(404).json({ error: 'The book could not be found.' });
+    } else {
+      res.status(200).json(book);
+    }
+  });
+};
