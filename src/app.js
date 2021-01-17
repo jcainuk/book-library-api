@@ -34,3 +34,5 @@ app.get('/books', bookControllers.list);
 app.get('/books/:id', bookControllers.getBookById);
 
 app.patch('/books/:id', bookControllers.updateBook);
+
+app.delete('/books/:id', bookControllers.deleteBook);
