@@ -92,5 +92,73 @@ describe('/books', () => {
           .catch((error) => done(error));
       });
     });
+    describe("PATCH /books/:id", () => {
+      it("updates book title by id", (done) => {
+        const book = books[0];
+        request(app)
+          .patch(`/books/${book.id}`)
+          .send({ title: "The Rum Diary" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+              expect(updatedBook.title).to.equal("The Rum Diary");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("updates book author by id", (done) => {
+        const book = books[0];
+        request(app)
+          .patch(`/books/${book.id}`)
+          .send({ author: "Hunter S. Thompson" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+              expect(updatedBook.author).to.equal("Hunter S. Thompson");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("updates book genre by id", (done) => {
+        const book = books[0];
+        request(app)
+          .patch(`/books/${book.id}`)
+          .send({ genre: "comedy-drama" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+              expect(updatedBook.genre).to.equal("comedy-drama");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("updates book ISBN by id", (done) => {
+        const book = books[0];
+        request(app)
+          .patch(`/books/${book.id}`)
+          .send({ ISBN: "9780971336360" })
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
+              expect(updatedBook.ISBN).to.equal("9780971336360");
+              done();
+            });
+          })
+          .catch((error) => done(error));
+      });
+      it("returns a 404 if the book does not exist", (done) => {
+        request(app)
+          .patch("/books/12345")
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal("The book could not be found.");
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 });
