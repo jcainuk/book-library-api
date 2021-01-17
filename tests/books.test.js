@@ -66,5 +66,31 @@ describe('/books', () => {
           .catch((error) => done(error));
       });
     });
+    describe("GET /books/:bookId", () => {
+      it("gets book record by ID", (done) => {
+        const book = books[0];
+        request(app)
+          .get(`/books/${book.id}`)
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.title).to.equal(reader.title);
+            expect(res.body.author).to.equal(reader.author);
+            expect(res.body.genre).to.equal(reader.genre);
+            expect(res.body.ISBN).to.equal(reader.ISBN);
+            done();
+          })
+          .catch((error) => done(error));
+      });
+      it("returns a 404 if the book does not exist", (done) => {
+        request(app)
+          .get("/books/12345")
+          .then((res) => {
+            expect(res.status).to.equal(404);
+            expect(res.body.error).to.equal("The book could not be found.");
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
   });
 });
