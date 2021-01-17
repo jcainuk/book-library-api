@@ -35,4 +35,36 @@ describe('/books', () => {
       expect(insertedBookRecords.ISBN).to.equal('9780450011849');
     });
   });
+  describe('with books in the database', () => {
+    let books;
+    beforeEach((done) => {
+      Promise.all([
+        Book.create({ title: "Dune", author: "Frank Herbert", genre: "science-fiction", ISBN: "9780450011849" }),
+        Book.create({ title: "Bridget Jones's Diary", author: "Helen Fielding", genre: "humour/diary fiction", ISBN: "8601410718626" }),
+        Book.create({ title: "Interview With The Vampire", author: "Anne Rice", genre: "gothic horror/vampire", ISBN: "9780751541977" }),
+      ]).then((documents) => {
+        books = documents;
+        done();
+      });
+    });
+    describe('GET /books', () => {
+      it('gets all book records', (done) => {
+        request(app)
+          .get('/books')
+          .then((res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body.length).to.equal(3);
+            res.body.forEach((book) => {
+              const expected = books.find((a) => a.id === book.id);
+              expect(book.title).to.equal(expected.title);
+              expect(book.author).to.equal(expected.author);
+              expect(book.genre).to.equal(expected.genre);
+              expect(book.ISBN).to.equal(expected.ISBN);
+            });
+            done();
+          })
+          .catch((error) => done(error));
+      });
+    });
+  });
 });
