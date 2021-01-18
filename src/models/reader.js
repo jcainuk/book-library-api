@@ -12,6 +12,7 @@ module.exports = (connection, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      min: 8,
     },
   };
   const ReaderModel = connection.define('Reader', schema);
