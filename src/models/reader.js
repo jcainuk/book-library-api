@@ -7,14 +7,22 @@ module.exports = (connection, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      isEmail: true,
+      validate: {
+        isEmail: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      min: 8,
+      validate: {
+        len: {
+          args: [8, 100],
+          msg: "Password must be at least 8 characters.",
+        },
+      },
     },
   };
-  const ReaderModel = connection.define('Reader', schema);
-  return ReaderModel;
+
+  const readerModel = connection.define('reader', schema);
+  return readerModel;
 };
