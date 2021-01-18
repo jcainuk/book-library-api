@@ -16,7 +16,9 @@ module.exports = (connection, DataTypes) => {
         notNull: {
           msg: 'Please enter your email',
         },
-        isEmail: true,
+        isEmail: {
+          msg: 'Please enter a valid email',
+        },
       },
     },
     password: {
@@ -28,7 +30,7 @@ module.exports = (connection, DataTypes) => {
         },
         len: {
           args: [8, 100],
-          msg: "Password must be at least 8 characters.",
+          msg: 'Password must be at least 8 characters.',
         },
       },
     },

@@ -46,75 +46,67 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
       expect(insertedReaderRecords.password).to.equal('supersecret');
     });
-    it("returns a 404 if the name is null", async () => {
+    it('returns a 422 if the name is null', async () => {
       await request(app)
-        .post("/readers/")
+        .post('/readers/')
         .send({
-          name: '',
           email: 'jbloggs@fakemail.com',
+          password: 'supersupersuper',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter your name');
+        });
+    });
+    it('returns a 422 if the email is null', async () => {
+      await request(app)
+        .post('/readers/')
+        .send({
+          name: 'Joe Bloggs',
           password: 'super',
         })
         .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('All fields must be completed.');
-        })
-        .catch((error) => done(error));
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter your email');
+        });
     });
-    it("returns a 404 if the email is null", async () => {
+    it('returns a 422 if the password is null', async () => {
       await request(app)
-        .post("/readers/")
-        .send({
-          name: 'Joe Bloggs',
-          email: '',
-          password: 'super',
-        })
-        .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('All fields must be completed.');
-        })
-        .catch((error) => done(error));
-    });
-    it("returns a 404 if the password is null", async () => {
-      await request(app)
-        .post("/readers/")
+        .post('/readers/')
         .send({
           name: 'Joe Bloggs',
           email: 'jbloggs@fakemail.com',
-          password: '',
         })
         .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('All fields must be completed.');
-        })
-        .catch((error) => done(error));
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter your password');
+        });
     });
-    it("returns a 404 if the reader email invalid", async () => {
+    it('returns a 422 if the reader email invalid', async () => {
       await request(app)
-        .post("/readers/")
+        .post('/readers/')
         .send({
           name: 'Joe Bloggs',
           email: 'jbloggsfakemail.com',
           password: 'supersecret',
         })
         .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('The email address is invalid.');
-        })
-        .catch((error) => done(error));
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter a valid email');
+        });
     });
-    it("returns a 404 if the password is less than 8 characters", async () => {
+    it('returns a 422 if the password is less than 8 characters', async () => {
       await request(app)
-        .post("/readers/")
+        .post('/readers/')
         .send({
           name: 'Joe Bloggs',
           email: 'jbloggs@fakemail.com',
           password: 'super',
         })
         .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('Password must be at least 8 characters.');
-        })
-        .catch((error) => done(error));
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Password must be at least 8 characters.');
+        });
     });
   });
 
@@ -122,9 +114,9 @@ describe('/readers', () => {
     let readers;
     beforeEach((done) => {
       Promise.all([
-        Reader.create({ name: "Harry Hill", email: "hhill@gmail.com", password: "supersecret1" }),
-        Reader.create({ name: "Jason Donovan", email: "Jdawg@outlook.com", password: "supersecret2" }),
-        Reader.create({ name: "Dave Windsor", email: "Windsor40@hotmail.com", password: "supersecret3" }),
+        Reader.create({ name: 'Harry Hill', email: 'hhill@gmail.com', password: 'supersecret1' }),
+        Reader.create({ name: 'Jason Donovan', email: 'Jdawg@outlook.com', password: 'supersecret2' }),
+        Reader.create({ name: 'Dave Windsor', email: 'Windsor40@hotmail.com', password: 'supersecret3' }),
       ]).then((documents) => {
         readers = documents;
         done();
@@ -148,8 +140,8 @@ describe('/readers', () => {
           .catch((error) => done(error));
       });
     });
-    describe("GET /readers/:readerId", () => {
-      it("gets reader record by ID", (done) => {
+    describe('GET /readers/:readerId', () => {
+      it('gets reader record by ID', (done) => {
         const reader = readers[0];
         request(app)
           .get(`/readers/${reader.id}`)
@@ -161,59 +153,59 @@ describe('/readers', () => {
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the reader does not exist", (done) => {
+      it('returns a 404 if the reader does not exist', (done) => {
         request(app)
-          .get("/readers/12345")
+          .get('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The reader could not be found.");
+            expect(res.body.error).to.equal('The reader could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
-    describe("PATCH /readers/:id", () => {
-      it("updates reader name by id", (done) => {
+    describe('PATCH /readers/:id', () => {
+      it('updates reader name by id', (done) => {
         const reader = readers[0];
         request(app)
           .patch(`/readers/${reader.id}`)
-          .send({ name: "Steven Jones" })
+          .send({ name: 'Steven Jones' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
-              expect(updatedReader.name).to.equal("Steven Jones");
+              expect(updatedReader.name).to.equal('Steven Jones');
               done();
             });
           })
           .catch((error) => done(error));
       });
-      it("updates reader email by id", (done) => {
+      it('updates reader email by id', (done) => {
         const reader = readers[0];
         request(app)
           .patch(`/readers/${reader.id}`)
-          .send({ email: "LSmith@fakemail.co.uk" })
+          .send({ email: 'LSmith@fakemail.co.uk' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
-              expect(updatedReader.email).to.equal("LSmith@fakemail.co.uk");
+              expect(updatedReader.email).to.equal('LSmith@fakemail.co.uk');
               done();
             });
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the reader does not exist", (done) => {
+      it('returns a 404 if the reader does not exist', (done) => {
         request(app)
-          .patch("/readers/12345")
+          .patch('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The reader could not be found.");
+            expect(res.body.error).to.equal('The reader could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
-    describe("DELETE /readers/:readerId", () => {
-      it("deletes reader record by id", (done) => {
+    describe('DELETE /readers/:readerId', () => {
+      it('deletes reader record by id', (done) => {
         const reader = readers[0];
         request(app)
           .delete(`/readers/${reader.id}`)
@@ -226,12 +218,12 @@ describe('/readers', () => {
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the reader does not exist", (done) => {
+      it('returns a 404 if the reader does not exist', (done) => {
         request(app)
-          .delete("/readers/12345")
+          .delete('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The reader could not be found.");
+            expect(res.body.error).to.equal('The reader could not be found.');
             done();
           })
           .catch((error) => done(error));
