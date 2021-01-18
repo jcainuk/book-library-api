@@ -74,6 +74,48 @@ describe('/readers', () => {
         })
         .catch((error) => done(error));
     });
+    it("returns a 404 if the name is null", (done) => {
+      request(app)
+        .post("/readers/")
+        .send({
+          name: '',
+          email: 'jbloggs@fakemail.com',
+          password: 'super',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('Name field cannot be empty.');
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the email is null", (done) => {
+      request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: '',
+          password: 'super',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('Email field cannot be empty.');
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the password is null", (done) => {
+      request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: 'jbloggs@fakemail.com',
+          password: '',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('Password field cannot be empty.');
+        })
+        .catch((error) => done(error));
+    });
   });
 
   describe('with readers in the database', () => {
