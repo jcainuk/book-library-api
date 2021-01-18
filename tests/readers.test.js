@@ -46,25 +46,19 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
       expect(insertedReaderRecords.password).to.equal('supersecret');
     });
-    it('fails if password is not more than 8 characters', async () => {
-      const response = await request(app).post('/readers').send({
-        name: 'John Barnes',
-        email: 'johnbarnes@fakemail.com',
-        password: 'abc',
-      });
-      expect(response.status).to.equal(404);
-      expect(response.body.error).to.equal('Password must be more than 8 characters.');
-    });
-    it('fails if invalid email provided', async () => {
-      const response = await request(app).post('/readers').send({
-        name: 'John Barnes',
-        email: 'johnbarnesfakemail.com',
-        password: 'password2021',
-      });
-      expect(response.status).to.equal(404);
-      expect(response.body.error).to.equal('Email address must be in correct format.');
+    it("returns a 404 if the reader email invalid", async () => {
+      const response = await request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: 'jbloggsfakemail.com',
+          password: 'supersecret',
+        });
+      await expect(response.status).to.equal(404);
+      expect(response.body.error).to.equal('The email address is invalid.');
     });
   });
+
   describe('with readers in the database', () => {
     let readers;
     beforeEach((done) => {
