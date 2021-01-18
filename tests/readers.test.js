@@ -46,27 +46,33 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
       expect(insertedReaderRecords.password).to.equal('supersecret');
     });
-    it("returns a 404 if the reader email invalid", async () => {
-      const response = await request(app)
+    it("returns a 404 if the reader email invalid", (done) => {
+      request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
           email: 'jbloggsfakemail.com',
           password: 'supersecret',
-        });
-      await expect(response.status).to.equal(404);
-      expect(response.body.error).to.equal('The email address is invalid.');
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('The email address is invalid.');
+        })
+        .catch((error) => done(error));
     });
-    it("returns a 404 if the password is less than 8 characters", async () => {
-      const response = await request(app)
+    it("returns a 404 if the password is less than 8 characters", (done) => {
+      request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
-          email: 'jbloggsfakemail.com',
+          email: 'jbloggs@fakemail.com',
           password: 'super',
-        });
-      await expect(response.status).to.equal(404);
-      expect(response.body.error).to.equal('Password must be at least 8 characters.');
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('Password must be at least 8 characters.');
+        })
+        .catch((error) => done(error));
     });
   });
 
