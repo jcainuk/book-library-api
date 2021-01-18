@@ -1,13 +1,13 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       isEmail: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
