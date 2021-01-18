@@ -5,8 +5,8 @@ const bookController = require('../controllers/books');
 
 router
   .route('/')
-  .get(bookController.getBooks)
-  .post(bookController.createBook);
+  .get(bookController.list)
+  .post(bookController.create);
 
 router
   .route('/:id')
