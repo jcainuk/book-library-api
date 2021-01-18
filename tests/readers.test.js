@@ -56,7 +56,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('Name field cannot be empty.');
+          expect(res.body.error).to.equal('All fields must be completed.');
         })
         .catch((error) => done(error));
     });
@@ -70,7 +70,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('Email field cannot be empty.');
+          expect(res.body.error).to.equal('All fields must be completed.');
         })
         .catch((error) => done(error));
     });
@@ -84,7 +84,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('Password field cannot be empty.');
+          expect(res.body.error).to.equal('All fields must be completed.');
         })
         .catch((error) => done(error));
     });
