@@ -13,7 +13,11 @@ In .then() , we give back a response to the user, with a status 201
   with a parameter containing the created record). */
 
 exports.create = (req, res) => {
-  Reader.create(req.body).then((reader) => res.status(201).json(reader));
+  if (req.body.name === '' || req.body.email === '' || req.body.password === '') {
+    res.status(404).json({ error: 'All fields must be completed.' });
+  } else {
+    Reader.create(req.body).then((reader) => res.status(201).json(reader));
+  }
 };
 
 exports.list = (req, res) => {

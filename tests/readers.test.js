@@ -46,8 +46,8 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
       expect(insertedReaderRecords.password).to.equal('supersecret');
     });
-    it("returns a 404 if the name is null", (done) => {
-      request(app)
+    it("returns a 404 if the name is null", async () => {
+      await request(app)
         .post("/readers/")
         .send({
           name: '',
@@ -60,8 +60,8 @@ describe('/readers', () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the email is null", (done) => {
-      request(app)
+    it("returns a 404 if the email is null", async () => {
+      await request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
@@ -74,8 +74,8 @@ describe('/readers', () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is null", (done) => {
-      request(app)
+    it("returns a 404 if the password is null", async () => {
+      await request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
@@ -88,8 +88,8 @@ describe('/readers', () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the reader email invalid", (done) => {
-      request(app)
+    it("returns a 404 if the reader email invalid", async () => {
+      await request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
@@ -102,8 +102,8 @@ describe('/readers', () => {
         })
         .catch((error) => done(error));
     });
-    it("returns a 404 if the password is less than 8 characters", (done) => {
-      request(app)
+    it("returns a 404 if the password is less than 8 characters", async () => {
+      await request(app)
         .post("/readers/")
         .send({
           name: 'Joe Bloggs',
