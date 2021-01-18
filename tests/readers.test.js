@@ -57,6 +57,17 @@ describe('/readers', () => {
       await expect(response.status).to.equal(404);
       expect(response.body.error).to.equal('The email address is invalid.');
     });
+    it("returns a 404 if the password is less than 8 characters", async () => {
+      const response = await request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: 'jbloggsfakemail.com',
+          password: 'super',
+        });
+      await expect(response.status).to.equal(404);
+      expect(response.body.error).to.equal('Password must be at least 8 characters.');
+    });
   });
 
   describe('with readers in the database', () => {
