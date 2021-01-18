@@ -3,6 +3,7 @@ module.exports = (connection, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      isEmail: true,
     },
     name: {
       type: DataTypes.STRING,
