@@ -46,34 +46,6 @@ describe('/readers', () => {
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
       expect(insertedReaderRecords.password).to.equal('supersecret');
     });
-    it("returns a 404 if the reader email invalid", (done) => {
-      request(app)
-        .post("/readers/")
-        .send({
-          name: 'Joe Bloggs',
-          email: 'jbloggsfakemail.com',
-          password: 'supersecret',
-        })
-        .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('The email address is invalid.');
-        })
-        .catch((error) => done(error));
-    });
-    it("returns a 404 if the password is less than 8 characters", (done) => {
-      request(app)
-        .post("/readers/")
-        .send({
-          name: 'Joe Bloggs',
-          email: 'jbloggs@fakemail.com',
-          password: 'super',
-        })
-        .then((res) => {
-          expect(res.status).to.equal(404);
-          expect(res.body.error).to.equal('Password must be at least 8 characters.');
-        })
-        .catch((error) => done(error));
-    });
     it("returns a 404 if the name is null", (done) => {
       request(app)
         .post("/readers/")
@@ -113,6 +85,34 @@ describe('/readers', () => {
         .then((res) => {
           expect(res.status).to.equal(404);
           expect(res.body.error).to.equal('Password field cannot be empty.');
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the reader email invalid", (done) => {
+      request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: 'jbloggsfakemail.com',
+          password: 'supersecret',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('The email address is invalid.');
+        })
+        .catch((error) => done(error));
+    });
+    it("returns a 404 if the password is less than 8 characters", (done) => {
+      request(app)
+        .post("/readers/")
+        .send({
+          name: 'Joe Bloggs',
+          email: 'jbloggs@fakemail.com',
+          password: 'super',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.error).to.equal('Password must be at least 8 characters.');
         })
         .catch((error) => done(error));
     });
