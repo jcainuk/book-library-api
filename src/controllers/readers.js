@@ -1,5 +1,5 @@
 const { Reader } = require('../models');
-const { createItem, getAllItems, getItemById, updateItem } = require('./helpers/helpers');
+const { createItem, getAllItems, getItemById, updateItem, deleteItem } = require('./helpers/helpers');
 
 /* Here we define the controller method like we used to do in the app.js file.
  chaining  function calls.
@@ -30,12 +30,5 @@ exports.updateReader = (req, res) => {
 };
 
 exports.deleteReader = (req, res) => {
-  const { id } = req.params;
-  Reader.destroy({ where: { id } }).then((rowsDeleted) => {
-    if (!rowsDeleted) {
-      res.status(404).json({ error: "The reader could not be found."});
-    } else {
-      res.status(204).json({ message: "Deleted successfully"});
-    }
-  });
+  deleteItem(res, 'reader', req.params.id);
 };

@@ -54,3 +54,27 @@ exports.updateItem = (res, model, item, id) => {
     }
   });
 };
+
+exports.deleteItem = (res, model, id) => {
+  const Model = getModel(model);
+
+  return Model.findByPk(id).then((foundItem) => {
+    if (!foundItem) {
+      res.status(404).json(get404Error(model));
+    } else {
+      Model.destroy({ where: { id } }).then(() => {
+        res.status(204).send().json({ message: "Deleted successfully"});
+      });
+    }
+  });
+};
+
+ //
+  // const { id } = req.params;
+  // Reader.destroy({ where: { id } }).then((rowsDeleted) => {
+  //   if (!rowsDeleted) {
+  //     
+  //   } else {
+  //     res.status(204).json({ message: "Deleted successfully"});
+  //   }
+  // });
