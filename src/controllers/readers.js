@@ -1,4 +1,5 @@
 const { Reader } = require('../models');
+const { createItem } = require('./helpers/helpers');
 
 /* Here we define the controller method like we used to do in the app.js file.
  chaining  function calls.
@@ -13,13 +14,7 @@ In .then() , we give back a response to the user, with a status 201
   with a parameter containing the created record). */
 
 exports.create = (req, res) => {
-  Reader
-    .create(req.body)
-    .then((reader) => res.status(201).json(reader))
-    .catch((violationError) => {
-      const formattedErrors = violationError.errors.map((currentError) => currentError.message);
-      res.status(422).json(formattedErrors);
-    });
+  createItem(res, 'reader', req.body);
 };
 
 exports.list = (req, res) => {
