@@ -1,5 +1,5 @@
 const { Book } = require('../models');
-const { createItem, getAllItems } = require('./helpers/helpers');
+const { createItem, getAllItems, getItemById } = require('./helpers/helpers');
 
 exports.create = (req, res) => {
   createItem(res, 'book', req.body);
@@ -10,14 +10,7 @@ exports.list = (req, res) => {
 };
 
 exports.getBookById = (req, res) => {
-  const { id } = req.params;
-  Book.findByPk(id).then((book) => {
-    if (!book) {
-      res.status(404).json({ error: 'The book could not be found.' });
-    } else {
-      res.status(200).json(book);
-    }
-  });
+  getItemById(res, 'book', req.params.id);
 };
 
 exports.updateBook = (req, res) => {

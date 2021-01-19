@@ -1,5 +1,7 @@
 const { Book, Reader } = require('../../models');
 
+const get404Error = (model) => ({ error: `The ${model} could not be found.` });
+
 const getModel = (model) => {
   const models = {
     book: Book,
@@ -22,5 +24,17 @@ exports.getAllItems = (res, model) => {
 
   return Model.findAll().then((allItems) => {
     res.status(200).json(allItems);
+  });
+};
+
+exports.getItemById = (res, model, id) => {
+  const Model = getModel(model);
+
+  return Model.findByPk(id).then((item) => {
+    if (!item) {
+      res.status(404).json(get404Error(model));
+    } else {
+      res.status(200).json(item);
+    }
   });
 };
