@@ -34,6 +34,58 @@ describe('/books', () => {
       expect(insertedBookRecords.genre).to.equal('science-fiction');
       expect(insertedBookRecords.ISBN).to.equal('9780450011849');
     });
+    it('returns a 422 if the title is null', async () => {
+      await request(app)
+        .post('/books/')
+        .send({
+          author: 'Frank Herbert',
+          genre: 'science-fiction',
+          ISBN: '9780450011849',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter the title');
+        });
+    });
+    it('returns a 422 if the author is null', async () => {
+      await request(app)
+        .post('/books/')
+        .send({
+          title: 'Dune',
+          genre: 'science-fiction',
+          ISBN: '9780450011849',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter the author');
+        });
+    });
+    it('returns a 422 if the genre is null', async () => {
+      await request(app)
+        .post('/books/')
+        .send({
+          title: 'Dune',
+          author: 'Frank Herbert',
+          ISBN: '9780450011849',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter the genre');
+        });
+    });
+    it('returns a 422 if the ISBN is null', async () => {
+      await request(app)
+        .post('/books/')
+        .send({
+          title: 'Dune',
+          author: 'Frank Herbert',
+          genre: 'science-fiction',
+        })
+        .then((res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.contain('Please enter the ISBN');
+        });
+    });
   });
   describe('with books in the database', () => {
     let books;
