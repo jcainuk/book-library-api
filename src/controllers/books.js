@@ -1,13 +1,8 @@
 const { Book } = require('../models');
+const { createItem } = require('./helpers/helpers');
 
 exports.create = (req, res) => {
-  Book
-    .create(req.body)
-    .then((book) => res.status(201).json(book))
-    .catch((violationError) => {
-      const formattedErrors = violationError.errors.map((currentError) => currentError.message);
-      res.status(422).json(formattedErrors);
-    });
+  createItem(res, 'book', req.body);
 };
 
 exports.list = (req, res) => {
