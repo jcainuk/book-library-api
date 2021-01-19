@@ -1,5 +1,5 @@
 const { Reader } = require('../models');
-const { createItem } = require('./helpers/helpers');
+const { createItem, getAllItems } = require('./helpers/helpers');
 
 /* Here we define the controller method like we used to do in the app.js file.
  chaining  function calls.
@@ -18,7 +18,7 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  Reader.findAll().then((readers) => res.status(200).json(readers));
+  getAllItems(res, 'reader');
 };
 
 exports.getReaderById = (req, res) => {

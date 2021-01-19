@@ -1,12 +1,12 @@
 const { Book } = require('../models');
-const { createItem } = require('./helpers/helpers');
+const { createItem, getAllItems } = require('./helpers/helpers');
 
 exports.create = (req, res) => {
   createItem(res, 'book', req.body);
 };
 
 exports.list = (req, res) => {
-  Book.findAll().then((readers) => res.status(200).json(readers));
+  getAllItems(res, 'book');
 };
 
 exports.getBookById = (req, res) => {

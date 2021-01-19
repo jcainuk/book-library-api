@@ -16,3 +16,11 @@ exports.createItem = (res, model, item) => {
       res.status(422).json(formattedErrors);
     });
 };
+
+exports.getAllItems = (res, model) => {
+  const Model = getModel(model);
+
+  return Model.findAll().then((allItems) => {
+    res.status(200).json(allItems);
+  });
+};
