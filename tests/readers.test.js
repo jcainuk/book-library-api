@@ -56,6 +56,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
+          expect(res.body.password).to.equal(undefined);
           expect(res.body).to.contain('Please enter your name');
         });
     });
@@ -68,6 +69,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
+          expect(res.body.password).to.equal(undefined);
           expect(res.body).to.contain('Please enter your email');
         });
     });
@@ -80,6 +82,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
+          expect(res.body.password).to.equal(undefined);
           expect(res.body).to.contain('Please enter your password');
         });
     });
@@ -92,6 +95,7 @@ describe('/readers', () => {
           password: 'supersecret',
         })
         .then((res) => {
+          expect(res.body.password).to.equal(undefined);
           expect(res.status).to.equal(422);
           expect(res.body).to.contain('Please enter a valid email');
         });
@@ -106,6 +110,7 @@ describe('/readers', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
+          expect(res.body.password).to.equal(undefined);
           expect(res.body).to.contain('Password must be at least 8 characters.');
         });
     });
@@ -129,6 +134,7 @@ describe('/readers', () => {
           .get('/readers')
           .then((res) => {
             expect(res.status).to.equal(200);
+            expect(res.body.password).to.equal(undefined);
             expect(res.body.length).to.equal(3);
             res.body.forEach((reader) => {
               const expected = readers.find((a) => a.id === reader.id);
@@ -156,6 +162,7 @@ describe('/readers', () => {
           .get('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
+            expect(res.body.password).to.equal(undefined);
             expect(res.body.error).to.equal('The reader could not be found.');
           });
       });
@@ -168,9 +175,9 @@ describe('/readers', () => {
           .send({ name: 'Steven Jones' })
           .then((res) => {
             expect(res.status).to.equal(200);
+            expect(res.body.password).to.equal(undefined);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader.name).to.equal('Steven Jones');
-              expect(updatedReader.password).to.equal(undefined);
             });
           });
       });
@@ -181,9 +188,9 @@ describe('/readers', () => {
           .send({ email: 'LSmith@fakemail.co.uk' })
           .then((res) => {
             expect(res.status).to.equal(200);
+            expect(res.body.password).to.equal(undefined);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader.email).to.equal('LSmith@fakemail.co.uk');
-              expect(updatedReader.password).to.equal(undefined);
             });
           });
       });
@@ -192,6 +199,7 @@ describe('/readers', () => {
           .patch('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
+            expect(res.body.password).to.equal(undefined);
             expect(res.body.error).to.equal('The reader could not be found.');
           });
       });
@@ -203,6 +211,7 @@ describe('/readers', () => {
           .delete(`/readers/${reader.id}`)
           .then((res) => {
             expect(res.status).to.equal(204);
+            expect(res.body.password).to.equal(undefined);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader).to.equal(null);
             });
@@ -213,6 +222,7 @@ describe('/readers', () => {
           .delete('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
+            expect(res.body.password).to.equal(undefined);
             expect(res.body.error).to.equal('The reader could not be found.');
           });
       });
