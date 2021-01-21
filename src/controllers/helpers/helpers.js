@@ -1,5 +1,12 @@
 const { Book, Reader } = require('../../models');
 
+const removePassword = (obj) => {
+  if (obj.hasOwnProperty('password')) {
+    delete obj.password;
+  }
+  return obj;
+};
+
 const get404Error = (model) => ({ error: `The ${model} could not be found.` });
 
 const getModel = (model) => {
@@ -21,9 +28,9 @@ exports.createItem = (res, model, item) => {
 
 exports.getAllItems = (res, model) => {
   const Model = getModel(model);
-
-  return Model.findAll().then((allItems) => {
-    res.status(200).json(allItems);
+  return Model.findAll().then((items) => {
+    const itemsWithoutPassword = items.map((item) => removePassword(item.dataValues));
+    res.status(200).json(itemsWithoutPassword);
   });
 };
 
@@ -34,7 +41,8 @@ exports.getItemById = (res, model, id) => {
     if (!item) {
       res.status(404).json(get404Error(model));
     } else {
-      res.status(200).json(item);
+      const itemWithoutPassword = removePassword(item.dataValues);
+      res.status(200).json(itemWithoutPassword);
     }
   });
 };
@@ -68,13 +76,3 @@ exports.deleteItem = (res, model, id) => {
     }
   });
 };
-
- //
-  // const { id } = req.params;
-  // Reader.destroy({ where: { id } }).then((rowsDeleted) => {
-  //   if (!rowsDeleted) {
-  //     
-  //   } else {
-  //     res.status(204).json({ message: "Deleted successfully"});
-  //   }
-  // });

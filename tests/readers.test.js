@@ -123,8 +123,8 @@ describe('/readers', () => {
       });
     });
     describe('GET /readers', () => {
-      it('gets all reader records', (done) => {
-        request(app)
+      it('gets all reader records', async () => {
+        await request(app)
           .get('/readers')
           .then((res) => {
             expect(res.status).to.equal(200);
@@ -133,100 +133,87 @@ describe('/readers', () => {
               const expected = readers.find((a) => a.id === reader.id);
               expect(reader.name).to.equal(expected.name);
               expect(reader.email).to.equal(expected.email);
-              expect(reader.password).to.equal(expected.password);
+              expect(reader.password).to.equal(undefined);
             });
-            done();
-          })
-          .catch((error) => done(error));
+          });
       });
     });
     describe('GET /readers/:readerId', () => {
-      it('gets reader record by ID', (done) => {
+      it('gets reader record by ID', async () => {
         const reader = readers[0];
-        request(app)
+        await request(app)
           .get(`/readers/${reader.id}`)
           .then((res) => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(reader.name);
             expect(res.body.email).to.equal(reader.email);
-            done();
-          })
-          .catch((error) => done(error));
+            expect(res.body.password).to.equal(undefined);
+          });
       });
-      it('returns a 404 if the reader does not exist', (done) => {
-        request(app)
+      it('returns a 404 if the reader does not exist', async () => {
+        await request(app)
           .get('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
             expect(res.body.error).to.equal('The reader could not be found.');
-            done();
-          })
-          .catch((error) => done(error));
+          });
       });
     });
     describe('PATCH /readers/:id', () => {
-      it('updates reader name by id', (done) => {
+      it('updates reader name by id', async () => {
         const reader = readers[0];
-        request(app)
+        await request(app)
           .patch(`/readers/${reader.id}`)
           .send({ name: 'Steven Jones' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader.name).to.equal('Steven Jones');
-              done();
+              expect(updatedReader.password).to.equal(undefined);
             });
-          })
-          .catch((error) => done(error));
+          });
       });
-      it('updates reader email by id', (done) => {
+      it('updates reader email by id', async () => {
         const reader = readers[0];
-        request(app)
+        await request(app)
           .patch(`/readers/${reader.id}`)
           .send({ email: 'LSmith@fakemail.co.uk' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader.email).to.equal('LSmith@fakemail.co.uk');
-              done();
+              expect(updatedReader.password).to.equal(undefined);
             });
-          })
-          .catch((error) => done(error));
+          });
       });
-      it('returns a 404 if the reader does not exist', (done) => {
-        request(app)
+      it('returns a 404 if the reader does not exist', async () => {
+        await request(app)
           .patch('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
             expect(res.body.error).to.equal('The reader could not be found.');
-            done();
-          })
-          .catch((error) => done(error));
+          });
       });
     });
     describe('DELETE /readers/:readerId', () => {
-      it('deletes reader record by id', (done) => {
+      it('deletes reader record by id', async () => {
         const reader = readers[0];
-        request(app)
+        await request(app)
           .delete(`/readers/${reader.id}`)
           .then((res) => {
             expect(res.status).to.equal(204);
             Reader.findByPk(reader.id, { raw: true }).then((updatedReader) => {
               expect(updatedReader).to.equal(null);
-              done();
             });
-          })
-          .catch((error) => done(error));
+          });
       });
-      it('returns a 404 if the reader does not exist', (done) => {
-        request(app)
+      it('returns a 404 if the reader does not exist', async () => {
+        await request(app)
           .delete('/readers/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
             expect(res.body.error).to.equal('The reader could not be found.');
-            done();
-          })
-          .catch((error) => done(error));
+          });
       });
     });
   });
