@@ -44,7 +44,7 @@ describe('/readers', () => {
       const insertedReaderRecords = await Reader.findByPk(response.body.id, { raw: true });
       expect(insertedReaderRecords.name).to.equal('Joe Bloggs');
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
-      expect(insertedReaderRecords.password).to.equal('supersecret');
+      expect(insertedReaderRecords.password).to.equal(undefined);
     });
     it('returns a 422 if the name is null', async () => {
       await request(app)
