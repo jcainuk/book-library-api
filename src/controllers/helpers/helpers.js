@@ -60,7 +60,8 @@ exports.updateItem = (res, model, item, id) => {
       getModel(model)
         .findByPk(id)
         .then((updatedItem) => {
-          res.status(200).json(updatedItem);
+          const itemWithoutPassword = removePassword(updatedItem.dataValues);
+          res.status(200).json(itemWithoutPassword);
         });
     }
   });
