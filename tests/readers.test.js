@@ -34,6 +34,7 @@ describe('/readers', () => {
       });
       await expect(response.status).to.equal(201);
       expect(response.body.name).to.equal('Joe Bloggs');
+      expect(response.body.password).to.equal(undefined);
       /* Below findByPk (find by primary key) is to find an reader record
         from our table readers (abstracted from the model Reader)
          with the id corresponding to response.body.id.
@@ -44,7 +45,7 @@ describe('/readers', () => {
       const insertedReaderRecords = await Reader.findByPk(response.body.id, { raw: true });
       expect(insertedReaderRecords.name).to.equal('Joe Bloggs');
       expect(insertedReaderRecords.email).to.equal('jbloggs@fakemail.com');
-      expect(insertedReaderRecords.password).to.equal(undefined);
+      expect(insertedReaderRecords.password).to.equal('supersecret');
     });
     it('returns a 422 if the name is null', async () => {
       await request(app)

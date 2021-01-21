@@ -19,7 +19,10 @@ const getModel = (model) => {
 exports.createItem = (res, model, item) => {
   const Model = getModel(model);
   Model.create(item)
-    .then((reader) => res.status(201).json(reader))
+    .then((reader) => {
+      const itemWithoutPassword = removePassword(reader.dataValues);
+      res.status(201).json(itemWithoutPassword);
+    })
     .catch((violationError) => {
       const formattedErrors = violationError.errors.map((currentError) => currentError.message);
       res.status(422).json(formattedErrors);
