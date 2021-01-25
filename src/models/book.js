@@ -9,15 +9,6 @@ module.exports = (connection, DataTypes) => {
         },
       },
     },
-    author: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Please enter the author',
-        },
-      },
-    },
     genre: {
       type: DataTypes.STRING,
       allowNull: false,
