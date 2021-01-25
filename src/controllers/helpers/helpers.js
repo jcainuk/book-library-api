@@ -1,4 +1,4 @@
-const { Book, Reader } = require('../../models');
+const { Book, Reader, Author, Genre } = require('../../models');
 
 const removePassword = (obj) => {
   if (obj.hasOwnProperty('password')) {
@@ -40,7 +40,7 @@ exports.getAllItems = (res, model) => {
 exports.getItemById = (res, model, id) => {
   const Model = getModel(model);
 
-  return Model.findByPk(id).then((item) => {
+  return Model.findByPk(id, { includes: Genre }).then((item) => {
     if (!item) {
       res.status(404).json(get404Error(model));
     } else {
