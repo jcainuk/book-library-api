@@ -1,5 +1,5 @@
 const { Reader } = require('../models');
-const { createItem, getAllItems, getItemById, updateItem, deleteItem } = require('./helpers/helpers');
+const { createItem, getAllItems, getItemById, updateItem, deleteItem, getAllBooks } = require('./helpers/helpers');
 
 /* Here we define the controller method like we used to do in the app.js file.
  chaining  function calls.

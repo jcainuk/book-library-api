@@ -1,5 +1,5 @@
 const { Book } = require('../models');
-const { createItem, getAllItems, getItemById, updateItem, deleteItem } = require('./helpers/helpers');
+const { createItem, getAllItems, getItemById, updateItem, deleteItem, getAllBooks } = require('./helpers/helpers');
 
 exports.create = (req, res) => {
   createItem(res, 'book', req.body);
