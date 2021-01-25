@@ -80,3 +80,11 @@ exports.deleteItem = (res, model, id) => {
     }
   });
 };
+
+exports.getAllBooks = (res, model) => {
+  const Model = getModel(model);
+
+  return Model.findAll({ include: Book }).then((items) => {
+    res.status(200).json(items);
+  });
+};
