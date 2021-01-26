@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const request = require('supertest');
-const { Book, Genre, Author } = require('../src/models');
+const { Book } = require('../src/models');
 const app = require('../src/app');
 
 describe('/books', () => {
