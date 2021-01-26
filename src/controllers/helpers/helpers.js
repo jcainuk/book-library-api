@@ -12,6 +12,8 @@ const get404Error = (model) => ({ error: `The ${model} could not be found.` });
 const getModel = (model) => {
   const models = {
     book: Book,
+    author: Author,
+    genre: Genre,
     reader: Reader,
   };
   return models[model];
