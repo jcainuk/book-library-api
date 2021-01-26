@@ -6,7 +6,7 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  getAllBooks(res, 'genre');
+  getAllItems(res, 'genre');
 };
 
 exports.getGenreById = (req, res) => {

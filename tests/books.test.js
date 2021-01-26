@@ -21,18 +21,6 @@ describe('/books', () => {
       await Book.destroy({ where: {} });
       await Genre.destroy({ where: {} });
       await Author.destroy({ where: {} });
-      genres = await Promise.all([
-        Genre.create({ genre: "Science-Fiction" }),
-        Genre.create({ genre: "Horror" }),
-        Genre.create({ genre: "Chick Lit" }),
-        Genre.create({ genre: "Vampire" }),
-      ]);
-      authors = await Promise.all([
-        Author.create({ author: "Frank Herbert" }),
-        Author.create({ author: "H. P. Lovecraft" }),
-        Author.create({ author: "Helen Fielding" }),
-        Author.create({ author: "Anne Rice" }),
-      ]);
     } catch (err) {
       console.log(err);
     }
@@ -41,8 +29,8 @@ describe('/books', () => {
     it('creates a new book in the database', async () => {
       const response = await request(app).post('/books').send({
         title: 'Dune',
-        author: '1',
-        genre: '1',
+        author: 'Frank Herbert',
+        genre: 'Science-Fiction',
         ISBN: '9780450011849',
       });
       await expect(response.status).to.equal(201);
@@ -57,8 +45,8 @@ describe('/books', () => {
       await request(app)
         .post('/books/')
         .send({
-          author: '1',
-          genre: '1',
+          author: 'Frank Herbert',
+          genre: 'Science-Fiction',
           ISBN: '9780450011849',
         })
         .then((res) => {
@@ -71,7 +59,7 @@ describe('/books', () => {
         .post('/books/')
         .send({
           title: 'Dune',
-          genre: '1',
+          genre: 'Science-Fiction',
           ISBN: '9780450011849',
         })
         .then((res) => {
@@ -84,7 +72,7 @@ describe('/books', () => {
         .post('/books/')
         .send({
           title: 'Dune',
-          author: '1',
+          author: 'Frank Herbert',
           ISBN: '9780450011849',
         })
         .then((res) => {
@@ -97,8 +85,8 @@ describe('/books', () => {
         .post('/books/')
         .send({
           title: 'Dune',
-          author: '1',
-          genre: '1',
+          author: 'Frank Herbert',
+          genre: 'Science-Fiction',
         })
         .then((res) => {
           expect(res.status).to.equal(422);
@@ -110,9 +98,9 @@ describe('/books', () => {
     let books;
     beforeEach((done) => {
       Promise.all([
-        Book.create({ title: "Dune", author: "1", genre: "1", ISBN: "9780450011849" }),
-        Book.create({ title: "Bridget Jones's Diary", author: "3", genre: "3", ISBN: "8601410718626" }),
-        Book.create({ title: "Interview With The Vampire", author: "4", genre: "4", ISBN: "9780751541977" }),
+        Book.create({ title: "Dune", author: "Frank Herbert", genre: "Science-Fiction", ISBN: "9780450011849" }),
+        Book.create({ title: "Bridget Jones's Diary", author: "Helen Fielding", genre: "Chick lit", ISBN: "8601410718626" }),
+        Book.create({ title: "Interview With The Vampire", author: "Anne Rice", genre: "Vampire", ISBN: "9780751541977" }),
       ]).then((documents) => {
         books = documents;
         done();
@@ -182,7 +170,7 @@ describe('/books', () => {
         const book = books[0];
         request(app)
           .patch(`/books/${book.id}`)
-          .send({ author: 2 })
+          .send({ author: "H. P. Lovecraft" })
           .then((res) => {
             expect(res.status).to.equal(200);
             Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
@@ -196,7 +184,7 @@ describe('/books', () => {
         const book = books[0];
         request(app)
           .patch(`/books/${book.id}`)
-          .send({ genre: "3" })
+          .send({ genre: "Chick lit" })
           .then((res) => {
             expect(res.status).to.equal(200);
             Book.findByPk(book.id, { raw: true }).then((updatedBook) => {

@@ -41,14 +41,13 @@ describe('/authors', () => {
   });
   describe('with authors in the database', () => {
     let authors;
-    beforeEach((done) => {
+    beforeEach(async () => {
       Promise.all([
         Author.create({ author: "H. P. Lovecraft" }),
         Author.create({ author: "Neil Gaiman" }),
         Author.create({ author: "Clare Azzopardi" }),
       ]).then((documents) => {
         authors = documents;
-        done();
       });
     });
     describe('GET /authors', () => {

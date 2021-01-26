@@ -32,7 +32,6 @@ describe('/genres', () => {
       await request(app)
         .post('/genres/')
         .send({
-          genre: 'Science-Fiction',
         })
         .then((res) => {
           expect(res.status).to.equal(422);
@@ -42,14 +41,13 @@ describe('/genres', () => {
   });
   describe('with genres in the database', () => {
     let genres;
-    beforeEach((done) => {
+    beforeEach(async () => {
       Promise.all([
         Genre.create({ genre: "Romance" }),
         Genre.create({ genre: "Fantasy" }),
         Genre.create({ genre: "Historical" }),
       ]).then((documents) => {
         genres = documents;
-        done();
       });
     });
     describe('GET /genres', () => {
