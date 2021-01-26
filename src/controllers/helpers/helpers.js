@@ -87,6 +87,7 @@ exports.getAllBooks = (res, model) => {
   const Model = getModel(model);
 
   return Model.findAll({ include: Book }).then((items) => {
-    res.status(200).json(items);
+    const itemsWithoutPassword = items.map((item) => removePassword(item.dataValues));
+    res.status(200).json(itemsWithoutPassword);
   });
 };
