@@ -21,12 +21,12 @@ describe('/genres', () => {
   describe('POST /genres', async () => {
     it('creates a new genre in the database', async () => {
       const response = await request(app).post('/genres').send({
-        genre: 'Science-Fiction',
+        name: 'Science-Fiction',
       });
       await expect(response.status).to.equal(201);
-      expect(response.body.genre).to.equal('Science-Fiction');
+      expect(response.body.name).to.equal('Science-Fiction');
       const insertedGenreRecords = await Genre.findByPk(response.body.id, { raw: true });
-      expect(insertedGenreRecords.genre).to.equal('Science-Fiction');
+      expect(insertedGenreRecords.name).to.equal('Science-Fiction');
     });
     it('returns a 422 if the genre is null', async () => {
       await request(app)
@@ -41,13 +41,14 @@ describe('/genres', () => {
   });
   describe('with genres in the database', () => {
     let genres;
-    beforeEach(async () => {
+    beforeEach((done) => {
       Promise.all([
-        Genre.create({ genre: "Romance" }),
-        Genre.create({ genre: "Fantasy" }),
-        Genre.create({ genre: "Historical" }),
+        Genre.create({ name: "Romance" }),
+        Genre.create({ name: "Fantasy" }),
+        Genre.create({ name: "Historical" }),
       ]).then((documents) => {
         genres = documents;
+        done();
       });
     });
     describe('GET /genres', () => {
@@ -59,7 +60,7 @@ describe('/genres', () => {
             expect(res.body.length).to.equal(3);
             res.body.forEach((genre) => {
               const expected = genres.find((a) => a.id === genre.id);
-              expect(genre.genre).to.equal(expected.genre);
+              expect(genre.name).to.equal(expected.name);
             });
             done();
           })
@@ -73,7 +74,7 @@ describe('/genres', () => {
           .get(`/genres/${genre.id}`)
           .then((res) => {
             expect(res.status).to.equal(200);
-            expect(res.body.genre).to.equal(genre.genre);
+            expect(res.body.name).to.equal(genre.name);
             done();
           })
           .catch((error) => done(error));
@@ -94,11 +95,11 @@ describe('/genres', () => {
         const genre = genres[0];
         request(app)
           .patch(`/genres/${genre.id}`)
-          .send({ genre: "Chick lit" })
+          .send({ name: "Chick lit" })
           .then((res) => {
             expect(res.status).to.equal(200);
             Genre.findByPk(genre.id, { raw: true }).then((updatedGenre) => {
-              expect(updatedGenre.genre).to.equal("Chick lit");
+              expect(updatedGenre.name).to.equal("Chick lit");
               done();
             });
           })

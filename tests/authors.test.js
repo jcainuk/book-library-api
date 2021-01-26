@@ -21,12 +21,12 @@ describe('/authors', () => {
   describe('POST /authors', async () => {
     it('creates a new author in the database', async () => {
       const response = await request(app).post('/authors').send({
-        author: 'Helen Fielding',
+        name: 'Helen Fielding',
       });
       await expect(response.status).to.equal(201);
-      expect(response.body.author).to.equal('Helen Fielding');
+      expect(response.body.name).to.equal('Helen Fielding');
       const insertedAuthorRecords = await Author.findByPk(response.body.id, { raw: true });
-      expect(insertedAuthorRecords.author).to.equal('Helen Fielding');
+      expect(insertedAuthorRecords.name).to.equal('Helen Fielding');
     });
     it('returns a 422 if the author is null', async () => {
       await request(app)
@@ -41,13 +41,14 @@ describe('/authors', () => {
   });
   describe('with authors in the database', () => {
     let authors;
-    beforeEach(async () => {
+    beforeEach((done) => {
       Promise.all([
-        Author.create({ author: "H. P. Lovecraft" }),
-        Author.create({ author: "Neil Gaiman" }),
-        Author.create({ author: "Clare Azzopardi" }),
+        Author.create({ name: "H. P. Lovecraft" }),
+        Author.create({ name: "Neil Gaiman" }),
+        Author.create({ name: "Clare Azzopardi" }),
       ]).then((documents) => {
         authors = documents;
+        done();
       });
     });
     describe('GET /authors', () => {
@@ -59,7 +60,7 @@ describe('/authors', () => {
             expect(res.body.length).to.equal(3);
             res.body.forEach((author) => {
               const expected = authors.find((a) => a.id === author.id);
-              expect(author.author).to.equal(expected.author);
+              expect(author.name).to.equal(expected.name);
             });
             done();
           })
@@ -73,7 +74,7 @@ describe('/authors', () => {
           .get(`/authors/${author.id}`)
           .then((res) => {
             expect(res.status).to.equal(200);
-            expect(res.body.author).to.equal(author.author);
+            expect(res.body.name).to.equal(author.name);
             done();
           })
           .catch((error) => done(error));
@@ -94,11 +95,11 @@ describe('/authors', () => {
         const author = authors[0];
         request(app)
           .patch(`/authors/${author.id}`)
-          .send({ author: "Dun Karm Psaila" })
+          .send({ name: "Dun Karm Psaila" })
           .then((res) => {
             expect(res.status).to.equal(200);
             Author.findByPk(author.id, { raw: true }).then((updatedAuthor) => {
-              expect(updatedAuthor.author).to.equal("Dun Karm Psaila");
+              expect(updatedAuthor.name).to.equal("Dun Karm Psaila");
               done();
             });
           })

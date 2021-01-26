@@ -1,7 +1,7 @@
 module.exports = (connection, DataTypes) => {
   const schema = {
 
-    genre: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
