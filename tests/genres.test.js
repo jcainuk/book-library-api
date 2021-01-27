@@ -42,7 +42,7 @@ describe('/genres', () => {
   describe('with genres in the database', () => {
     let genres;
     beforeEach((done) => {
-      Promise.all([
+      genres = Promise.all([
         Genre.create({ name: "Romance" }),
         Genre.create({ name: "Fantasy" }),
         Genre.create({ name: "Historical" }),

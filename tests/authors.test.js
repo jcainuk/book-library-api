@@ -42,7 +42,7 @@ describe('/authors', () => {
   describe('with authors in the database', () => {
     let authors;
     beforeEach((done) => {
-      Promise.all([
+      authors = Promise.all([
         Author.create({ name: "H. P. Lovecraft" }),
         Author.create({ name: "Neil Gaiman" }),
         Author.create({ name: "Clare Azzopardi" }),
