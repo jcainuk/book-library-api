@@ -32,25 +32,27 @@ describe('/books', () => {
       const genre = await Genre.create({ name: "Vampire"});
       const author = await Author.create({ name: "Anne Rice" });
       const response = await request(app).post('/books').send({
-        title: 'Dune',
+        title: 'Interview With The Vampire',
         AuthorId: author.id,
         GenreId: genre.id,
         ISBN: '9780450011849',
       });
       await expect(response.status).to.equal(201);
-      expect(response.body.title).to.equal('Dune');
+      expect(response.body.title).to.equal('Interview With The Vampire');
       const insertedBookRecord = await Book.findByPk(response.body.id, { raw: true });
-      expect(insertedBookRecord.title).to.equal('Dune');
+      expect(insertedBookRecord.title).to.equal('Interview With The Vampire');
       expect(insertedBookRecord.AuthorId).to.equal(author.id);
       expect(insertedBookRecord.GenreId).to.equal(genre.id);
       expect(insertedBookRecord.ISBN).to.equal('9780450011849');
     });
     it('returns a 422 if the title is null', async () => {
+      const genre = await Genre.create({ name: "Vampire"});
+      const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
         .send({
-          author: 'Frank Herbert',
-          genre: 'Science-Fiction',
+          AuthorId: author.id,
+          GenreId: genre.id,
           ISBN: '9780450011849',
         })
         .then((res) => {
@@ -60,6 +62,7 @@ describe('/books', () => {
     });
     it('returns a 422 if the author is null', async () => {
       const genre = await Genre.create({ name: "Vampire"});
+      const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
         .send({
@@ -73,11 +76,13 @@ describe('/books', () => {
         });
     });
     it('returns a 422 if the genre is null', async () => {
+      const genre = await Genre.create({ name: "Vampire"});
+      const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
         .send({
           title: 'Dune',
-          author: 'Frank Herbert',
+          AuthorId: author.id,
           ISBN: '9780450011849',
         })
         .then((res) => {
@@ -86,12 +91,14 @@ describe('/books', () => {
         });
     });
     it('returns a 422 if the ISBN is null', async () => {
+      const genre = await Genre.create({ name: "Vampire"});
+      const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
         .send({
           title: 'Dune',
-          author: 'Frank Herbert',
-          genre: 'Science-Fiction',
+          AuthorId: author.id,
+          GenreId: genre.id,
         })
         .then((res) => {
           expect(res.status).to.equal(422);
@@ -162,7 +169,7 @@ describe('/books', () => {
           .catch((error) => done(error));
       });
     });
-    describe('PATCH /books/:id', () => {
+    describe('PATCH /books/:id', (done) => {
       it('updates book title by id', (done) => {
         const book = books[0];
         request(app)
@@ -177,35 +184,37 @@ describe('/books', () => {
           })
           .catch((error) => done(error));
       });
-      it('updates book author by id', (done) => {
+      it('updates book author by id', async () => {
+        const author = await Author.create({ name: "Anne Rice" });
         const book = books[0];
         request(app)
           .patch(`/books/${book.id}`)
-          .send({ author: 'H. P. Lovecraft' })
+          .send({ AuthorId: author.id })
           .then((res) => {
             expect(res.status).to.equal(200);
             Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
-              expect(updatedBook.author).to.equal('H. P. Lovecraft');
+              expect(updatedBook.AuthorId.name).to.equal('Anne Rice');
               done();
             });
           })
           .catch((error) => done(error));
       });
-      it('updates book genre by id', (done) => {
+      it('updates book genre by id', async () => {
+        const genre = await Genre.create({ name: 'Horror' });
         const book = books[0];
         request(app)
           .patch(`/books/${book.id}`)
-          .send({ genre: 'Chick lit' })
+          .send({ GenreId: genre.id })
           .then((res) => {
             expect(res.status).to.equal(200);
             Book.findByPk(book.id, { raw: true }).then((updatedBook) => {
-              expect(updatedBook.genre).to.equal('Chick lit');
+              expect(updatedBook.GenreId.name).to.equal('Horror');
               done();
             });
           })
           .catch((error) => done(error));
       });
-      it('updates book ISBN by id', (done) => {
+      it('updates book ISBN by id', async () => {
         const book = books[0];
         request(app)
           .patch(`/books/${book.id}`)
