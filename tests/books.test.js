@@ -29,7 +29,7 @@ describe('/books', () => {
   });
   describe('POST /books', async () => {
     it('creates a new book in the database', async () => {
-      const genre = await Genre.create({ name: "Vampire"});
+      const genre = await Genre.create({ name: "Vampire" });
       const author = await Author.create({ name: "Anne Rice" });
       const response = await request(app).post('/books').send({
         title: 'Interview With The Vampire',
@@ -46,7 +46,7 @@ describe('/books', () => {
       expect(insertedBookRecord.ISBN).to.equal('9780450011849');
     });
     it('returns a 422 if the title is null', async () => {
-      const genre = await Genre.create({ name: "Vampire"});
+      const genre = await Genre.create({ name: "Vampire" });
       const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
@@ -61,7 +61,7 @@ describe('/books', () => {
         });
     });
     it('returns a 422 if the author is null', async () => {
-      const genre = await Genre.create({ name: "Vampire"});
+      const genre = await Genre.create({ name: "Vampire" });
       const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
@@ -73,10 +73,11 @@ describe('/books', () => {
         .then((res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.contain('Please enter the author');
+          console.log(res.body);
         });
     });
     it('returns a 422 if the genre is null', async () => {
-      const genre = await Genre.create({ name: "Vampire"});
+      const genre = await Genre.create({ name: "Vampire" });
       const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
@@ -91,7 +92,7 @@ describe('/books', () => {
         });
     });
     it('returns a 422 if the ISBN is null', async () => {
-      const genre = await Genre.create({ name: "Vampire"});
+      const genre = await Genre.create({ name: "Vampire" });
       const author = await Author.create({ name: "Anne Rice" });
       await request(app)
         .post('/books/')
