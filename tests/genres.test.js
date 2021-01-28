@@ -11,6 +11,7 @@ describe('/genres', () => {
       console.log(err);
     }
   });
+
   beforeEach(async () => {
     try {
       await Genre.destroy({ where: {} });
@@ -18,6 +19,7 @@ describe('/genres', () => {
       console.log(err);
     }
   });
+
   describe('POST /genres', async () => {
     it('creates a new genre in the database', async () => {
       const response = await request(app).post('/genres').send({
@@ -39,18 +41,23 @@ describe('/genres', () => {
         });
     });
   });
+
   describe('with genres in the database', () => {
     let genres;
-    beforeEach((done) => {
-      genres = Promise.all([
-        Genre.create({ name: "Romance" }),
-        Genre.create({ name: "Fantasy" }),
-        Genre.create({ name: "Historical" }),
-      ]).then((documents) => {
-        genres = documents;
-        done();
-      });
+
+    beforeEach(async () => {
+      try {
+        await Genre.destroy({ where: {} });
+        genres = await Promise.all([
+          Genre.create({ name: 'Romance' }),
+          Genre.create({ name: 'Fantasy' }),
+          Genre.create({ name: 'Historical' }),
+        ]);
+      } catch (err) {
+        console.log(err);
+      }
     });
+
     describe('GET /genres', () => {
       it('gets all genre records', (done) => {
         request(app)
@@ -67,6 +74,7 @@ describe('/genres', () => {
           .catch((error) => done(error));
       });
     });
+
     describe("GET /genres/:genreId", () => {
       it("gets genre record by ID", (done) => {
         const genre = genres[0];
@@ -90,20 +98,19 @@ describe('/genres', () => {
           .catch((error) => done(error));
       });
     });
+
     describe("PATCH /genres/:id", () => {
-      it("updates genre by id", (done) => {
+      it("updates genre by id", async () => {
         const genre = genres[0];
-        request(app)
+        await request(app)
           .patch(`/genres/${genre.id}`)
           .send({ name: "Chick lit" })
           .then((res) => {
             expect(res.status).to.equal(200);
             Genre.findByPk(genre.id, { raw: true }).then((updatedGenre) => {
               expect(updatedGenre.name).to.equal("Chick lit");
-              done();
             });
-          })
-          .catch((error) => done(error));
+          });
       });
       it("returns a 404 if the genre does not exist", (done) => {
         request(app)
@@ -116,6 +123,7 @@ describe('/genres', () => {
           .catch((error) => done(error));
       });
     });
+
     describe("DELETE /genres/:genreId", () => {
       it("deletes genre record by id", (done) => {
         const genre = genres[0];

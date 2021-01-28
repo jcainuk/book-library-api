@@ -20,13 +20,16 @@ describe('/authors', () => {
   });
   describe('POST /authors', async () => {
     it('creates a new author in the database', async () => {
-      const response = await request(app).post('/authors').send({
-        name: 'Helen Fielding',
-      });
-      await expect(response.status).to.equal(201);
-      expect(response.body.name).to.equal('Helen Fielding');
-      const insertedAuthorRecords = await Author.findByPk(response.body.id, { raw: true });
-      expect(insertedAuthorRecords.name).to.equal('Helen Fielding');
+      await request(app)
+        .post('/authors').send({
+            name: 'Helen Fielding',
+          })
+        .then(async (res) => {
+          expect(res.status).to.equal(201);
+          expect(res.body.name).to.equal('Helen Fielding');
+          const insertedAuthorRecords = await Author.findByPk(res.body.id, { raw: true });
+          expect(insertedAuthorRecords.name).to.equal('Helen Fielding');
+        });
     });
     it('returns a 422 if the author is null', async () => {
       await request(app)
@@ -68,7 +71,7 @@ describe('/authors', () => {
       });
     });
     describe("GET /authors/:authorId", () => {
-      it("gets author record by ID", (done) => {
+      it("gets author record by ID", async () => {
         const author = authors[0];
         request(app)
           .get(`/authors/${author.id}`)
@@ -77,7 +80,7 @@ describe('/authors', () => {
             expect(res.body.name).to.equal(author.name);
             done();
           })
-          .catch((error) => done(error));
+          //.catch((error) => done(error));
       });
       it("returns a 404 if the author does not exist", (done) => {
         request(app)
@@ -91,7 +94,7 @@ describe('/authors', () => {
       });
     });
     describe("PATCH /authors/:id", () => {
-      it("updates author by id", (done) => {
+      it("updates author by id", async () => {
         const author = authors[0];
         request(app)
           .patch(`/authors/${author.id}`)
@@ -100,7 +103,7 @@ describe('/authors', () => {
             expect(res.status).to.equal(200);
             Author.findByPk(author.id, { raw: true }).then((updatedAuthor) => {
               expect(updatedAuthor.name).to.equal("Dun Karm Psaila");
-              done();
+              //done()
             });
           })
           .catch((error) => done(error));
