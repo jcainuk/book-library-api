@@ -26,9 +26,9 @@ describe('/books', () => {
   });
   describe('POST /books', async () => {
     it('creates a new book in the database', async () => {
-      const genre = Genre.create({ name: 'Vampire' });
-      const author = Author.create({ name: 'Anne Rice' });
-      const response = request(app).post('/books').send({
+      const genre = await Genre.create({ name: 'Vampire' });
+      const author = await Author.create({ name: 'Anne Rice' });
+      const response = await request(app).post('/books').send({
         title: 'Interview With The Vampire',
         AuthorId: author.id,
         GenreId: genre.id,
