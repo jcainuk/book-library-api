@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const request = require('supertest');
 const {
-  Book, Genre, Author, Reader,
+  Book, Genre, Author,
 } = require('../src/models');
 const app = require('../src/app');
 
@@ -43,8 +43,8 @@ describe('/books', () => {
       expect(insertedBookRecord.ISBN).to.equal('9780450011849');
     });
     it('returns a 422 if the title is null', async () => {
-      const genre = Genre.create({ name: 'Vampire' });
-      const author = Author.create({ name: 'Anne Rice' });
+      const genre = await Genre.create({ name: 'Vampire' });
+      const author = await Author.create({ name: 'Anne Rice' });
       await request(app)
         .post('/books/')
         .send({
@@ -58,7 +58,7 @@ describe('/books', () => {
         });
     });
     it('returns a 422 if the author is null', async () => {
-      const genre = Genre.create({ name: 'Vampire' });
+      const genre = await Genre.create({ name: 'Vampire' });
       await request(app)
         .post('/books/')
         .send({
@@ -68,7 +68,7 @@ describe('/books', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
-          expect(res.body).to.contain('Please enter the author');
+          expect(res.body).to.contain('Please enter the AuthorId');
         });
     });
     it('returns a 422 if the genre is null', async () => {
@@ -82,7 +82,7 @@ describe('/books', () => {
         })
         .then((res) => {
           expect(res.status).to.equal(422);
-          expect(res.body).to.contain('Please enter the genre');
+          expect(res.body).to.contain('Please enter the GenreId');
         });
     });
     it('returns a 422 if the ISBN is null', async () => {

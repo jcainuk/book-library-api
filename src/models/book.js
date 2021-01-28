@@ -23,6 +23,26 @@ module.exports = (connection, DataTypes) => {
         },
       },
     },
+    AuthorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: [true],
+          msg: 'Please enter the AuthorId',
+        },
+      },
+    },
+    GenreId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: [true],
+          msg: 'Please enter the GenreId',
+        },
+      },
+    },
   };
   const BookModel = connection.define('Book', schema);
   return BookModel;
