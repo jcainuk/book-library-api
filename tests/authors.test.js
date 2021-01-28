@@ -22,8 +22,8 @@ describe('/authors', () => {
     it('creates a new author in the database', async () => {
       await request(app)
         .post('/authors').send({
-            name: 'Helen Fielding',
-          })
+          name: 'Helen Fielding',
+        })
         .then(async (res) => {
           expect(res.status).to.equal(201);
           expect(res.body.name).to.equal('Helen Fielding');
@@ -103,7 +103,6 @@ describe('/authors', () => {
             expect(res.status).to.equal(200);
             Author.findByPk(author.id, { raw: true }).then((updatedAuthor) => {
               expect(updatedAuthor.name).to.equal("Dun Karm Psaila");
-              //done()
             });
           })
           .catch((error) => done(error));

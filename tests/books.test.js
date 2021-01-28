@@ -105,13 +105,7 @@ describe('/books', () => {
     let books;
     let genres;
     let authors;
-    // before(async () => {
-    //   try {
-    //     await Book.sequelize.sync();
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // });
+
     beforeEach(async () => {
       try {
         await Book.destroy({ where: {} });
