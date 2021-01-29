@@ -46,9 +46,9 @@ describe('/authors', () => {
     let authors;
     beforeEach((done) => {
       authors = Promise.all([
-        Author.create({ name: "H. P. Lovecraft" }),
-        Author.create({ name: "Neil Gaiman" }),
-        Author.create({ name: "Clare Azzopardi" }),
+        Author.create({ name: 'H. P. Lovecraft' }),
+        Author.create({ name: 'Neil Gaiman' }),
+        Author.create({ name: 'Clare Azzopardi' }),
       ]).then((documents) => {
         authors = documents;
         done();
@@ -70,8 +70,8 @@ describe('/authors', () => {
           .catch((error) => done(error));
       });
     });
-    describe("GET /authors/:authorId", () => {
-      it("gets author record by ID", async () => {
+    describe('GET /authors/:authorId', () => {
+      it('gets author record by ID', async () => {
         const author = authors[0];
         request(app)
           .get(`/authors/${author.id}`)
@@ -79,47 +79,47 @@ describe('/authors', () => {
             expect(res.status).to.equal(200);
             expect(res.body.name).to.equal(author.name);
             done();
-          })
-          //.catch((error) => done(error));
+          });
+        // .catch((error) => done(error));
       });
-      it("returns a 404 if the author does not exist", (done) => {
+      it('returns a 404 if the author does not exist', (done) => {
         request(app)
-          .get("/authors/12345")
+          .get('/authors/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The author could not be found.");
+            expect(res.body.error).to.equal('The author could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
-    describe("PATCH /authors/:id", () => {
-      it("updates author by id", async () => {
+    describe('PATCH /authors/:id', () => {
+      it('updates author by id', async () => {
         const author = authors[0];
         request(app)
           .patch(`/authors/${author.id}`)
-          .send({ name: "Dun Karm Psaila" })
+          .send({ name: 'Dun Karm Psaila' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Author.findByPk(author.id, { raw: true }).then((updatedAuthor) => {
-              expect(updatedAuthor.name).to.equal("Dun Karm Psaila");
+              expect(updatedAuthor.name).to.equal('Dun Karm Psaila');
             });
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the author does not exist", (done) => {
+      it('returns a 404 if the author does not exist', (done) => {
         request(app)
-          .patch("/authors/12345")
+          .patch('/authors/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The author could not be found.");
+            expect(res.body.error).to.equal('The author could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
-    describe("DELETE /authors/:authorId", () => {
-      it("deletes author record by id", (done) => {
+    describe('DELETE /authors/:authorId', () => {
+      it('deletes author record by id', (done) => {
         const author = authors[0];
         request(app)
           .delete(`/authors/${author.id}`)
@@ -132,12 +132,12 @@ describe('/authors', () => {
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the author does not exist", (done) => {
+      it('returns a 404 if the author does not exist', (done) => {
         request(app)
-          .delete("/authors/12345")
+          .delete('/authors/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The author could not be found.");
+            expect(res.body.error).to.equal('The author could not be found.');
             done();
           })
           .catch((error) => done(error));
