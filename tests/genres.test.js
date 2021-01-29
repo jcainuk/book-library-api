@@ -75,8 +75,8 @@ describe('/genres', () => {
       });
     });
 
-    describe("GET /genres/:genreId", () => {
-      it("gets genre record by ID", (done) => {
+    describe('GET /genres/:genreId', () => {
+      it('gets genre record by ID', (done) => {
         const genre = genres[0];
         request(app)
           .get(`/genres/${genre.id}`)
@@ -87,45 +87,45 @@ describe('/genres', () => {
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the genre does not exist", (done) => {
+      it('returns a 404 if the genre does not exist', (done) => {
         request(app)
-          .get("/genres/12345")
+          .get('/genres/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The genre could not be found.");
+            expect(res.body.error).to.equal('The genre could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
 
-    describe("PATCH /genres/:id", () => {
-      it("updates genre by id", async () => {
+    describe('PATCH /genres/:id', () => {
+      it('updates genre by id', async () => {
         const genre = genres[0];
         await request(app)
           .patch(`/genres/${genre.id}`)
-          .send({ name: "Chick lit" })
+          .send({ name: 'Chick lit' })
           .then((res) => {
             expect(res.status).to.equal(200);
             Genre.findByPk(genre.id, { raw: true }).then((updatedGenre) => {
-              expect(updatedGenre.name).to.equal("Chick lit");
+              expect(updatedGenre.name).to.equal('Chick lit');
             });
           });
       });
-      it("returns a 404 if the genre does not exist", (done) => {
+      it('returns a 404 if the genre does not exist', (done) => {
         request(app)
-          .patch("/genres/12345")
+          .patch('/genres/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The genre could not be found.");
+            expect(res.body.error).to.equal('The genre could not be found.');
             done();
           })
           .catch((error) => done(error));
       });
     });
 
-    describe("DELETE /genres/:genreId", () => {
-      it("deletes genre record by id", (done) => {
+    describe('DELETE /genres/:genreId', () => {
+      it('deletes genre record by id', (done) => {
         const genre = genres[0];
         request(app)
           .delete(`/genres/${genre.id}`)
@@ -138,12 +138,12 @@ describe('/genres', () => {
           })
           .catch((error) => done(error));
       });
-      it("returns a 404 if the genre does not exist", (done) => {
+      it('returns a 404 if the genre does not exist', (done) => {
         request(app)
-          .delete("/genres/12345")
+          .delete('/genres/12345')
           .then((res) => {
             expect(res.status).to.equal(404);
-            expect(res.body.error).to.equal("The genre could not be found.");
+            expect(res.body.error).to.equal('The genre could not be found.');
             done();
           })
           .catch((error) => done(error));
